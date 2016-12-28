@@ -25,7 +25,6 @@ export class Coordinates extends Component {
   render () {
     return (
       <View style={styles.container}>
-        {console.warn('double here')}
         <View style={styles.coords}>
           {this.state.lat !== 'unknown' &&
             <Text style={styles.coordsText}>
