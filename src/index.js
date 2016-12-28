@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Coordinates } from './containers';
+import { Coordinates, Map } from './containers';
 
 export const Root = () => (
-    <Coordinates />
+  <Map />
 );
