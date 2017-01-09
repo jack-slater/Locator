@@ -98,7 +98,7 @@ export class Map extends Component {
         </MapView>
         <View style={styles.textContainer}>
         {this.state.distA !== 'unknown' && <Text>
-          {this.state.distA < 10 ? 'first marker' : <Text>{this.state.distB}</Text> }
+          {this.state.distA < 10 ? 'first marker' : <Text>{this.state.distA}</Text> }
         </Text> }
 
           {this.state.distB !== 'unknown' && <Text>

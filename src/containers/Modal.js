@@ -7,30 +7,57 @@ import {
   Modal
 } from 'react-native';
 import Button from 'apsl-react-native-button';
+let { height, width } = Dimensions.get('window');
 
 export class MapModal extends Component {
   render () {
     return (
       <View>
         <Modal
-          style={{ flex: 1 }}
+
           animationType={'slide'}
-          transparent={false}
           visible={this.props.visible}
+          transparent={true}
           setModalVisibility={this.props.setModalVisibility}
           onRequestClose={this.props.closeModal}
           >
-          <View>
-            <Text>This is a modal</Text>
+          <View style={styles.modal}>
+            <Text style={styles.text}>This is a modal</Text>
+            <Text style={styles.text}>{this.props.props}</Text>
+            <Button
+              style={styles.button}
+              onPress={this.props.closeModal}
+            >
+              <Text style={styles.text}>x</Text>
+            </Button>
           </View>
-          <Button
-            onPress={this.props.closeModal}
-          >
-            <Text>close</Text>
-          </Button>
-          <Text>{this.props.props}</Text>
+
         </Modal>
       </View>
     );
   }
 };
+
+const styles = StyleSheet.create({
+  modal: {
+    width: width * 0.9,
+    height: height * 0.85,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(1,1,1,0.8)',
+    marginTop: 20,
+    marginLeft: 20,
+    borderRadius: 5
+  },
+  text: {
+    color: 'white'
+  },
+  button: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    borderColor: '#f5f5f5',
+    paddingRight: 12,
+    paddingLeft: 12
+  }
+});
