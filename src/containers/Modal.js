@@ -14,7 +14,6 @@ export class MapModal extends Component {
     return (
       <View>
         <Modal
-
           animationType={'slide'}
           visible={this.props.visible}
           transparent={true}
@@ -54,10 +53,11 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    top: 0,
-    right: 0,
+    bottom: 10,
+    right: 60,
+    width: width * 0.6,
     borderColor: '#f5f5f5',
-    paddingRight: 12,
-    paddingLeft: 12
+    paddingLeft: 50,
+    paddingRight: 50
   }
 });
