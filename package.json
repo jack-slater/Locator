@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
-    "postinstall": "rnpm link"
+    "test": "jest"
   },
   "dependencies": {
     "apsl-react-native-button": "^3.0.2",
@@ -16,8 +15,10 @@
     "logger": "0.0.1",
     "mongoose": "^4.7.6",
     "react": "15.4.1",
-    "react-native": "0.39.2",
+    "react-native": "^0.39.2",
     "react-native-maps": "^0.12.2",
+    "rnpm": "^1.9.0",
+    "watchman": "^0.1.8"
     "superagent": "^3.3.1"
   },
   "devDependencies": {
