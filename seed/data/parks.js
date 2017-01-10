@@ -5,5 +5,6 @@ module.exports = [{
     latitude: 53.451562,
     longitude: -2.249320
   },
-  active: true
+  active: true,
+  address: '56565'
 }];
