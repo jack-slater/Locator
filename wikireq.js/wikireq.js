@@ -2,10 +2,11 @@ const request = require('superagent');
 const async = require('async');
 const animalsData = require('../seed/data/animals');
 
-const getWikiImages = (animalsData, callback) => {
+const getWikiData = (callback) => {
   async.waterfall([
-    firstGet,
-    secondGet
+    firstGetImg,
+    secondGetImg,
+    getText
   ], function (err, res) {
     if (err) {
       return callback(err);
@@ -14,11 +15,7 @@ const getWikiImages = (animalsData, callback) => {
   });
 };
 
-const formatName = (name) => {
-  return name.replace(' ', '_');
-};
-
-const firstGet = (done) => {
+const firstGetImg = (done) => {
   async.mapSeries(animalsData, (animal, mapCallback) => {
     const name = animal.wiki_name;
     request
@@ -26,7 +23,6 @@ const firstGet = (done) => {
       .end((err, res) => {
         if (err) mapCallback(err);
         for (var key in res.body.query.pages) {
-          console.log(res.body.query.pages[key].pageimage, name);
           animal.photo = res.body.query.pages[key].pageimage;
           mapCallback(null, animal);
         }
@@ -37,19 +33,23 @@ const firstGet = (done) => {
   });
 };
 
-
-
-const secondGet = (imgName, callback) => {
-  if (imgName.slice(0, 3) !== 'File') {
-    imgName = `File:${imgName}`;
-  }
-  request
-    .get(`http://en.wikipedia.org/w/api.php?action=query&prop=imageinfo&iiprop=url&format=json&titles=${imgName}`)
-    .end((err, res) => {
-      if (err) callback(err);
-      const imgUrl = res.body.query.pages['-1'].imageinfo[0].url;
-      callback(null, imgUrl);
-    });
+const secondGetImg = (newAnimalsData, done) => {
+  async.mapSeries(newAnimalsData, (animal, mapCallback) => {
+    const imgName = `File:${animal.photo}`.replace('&', '%26');
+    request
+      .get(`http://en.wikipedia.org/w/api.php?action=query&prop=imageinfo&iiprop=url&format=json&titles=${imgName}`)
+      .end((err, res) => {
+        if (err) mapCallback(err);
+        for (var key in res.body.query.pages) {
+          animal.photo = res.body.query.pages[key].imageinfo[0].url;
+          console.log(animal.photo, animal.common_name);
+          mapCallback(null, animal);
+        }
+      });
+  }, (err) => {
+    if (err) return done(err);
+    return done(null, newAnimalsData);
+  });
 };
 
 const log = (err, res) => {
@@ -57,23 +57,29 @@ const log = (err, res) => {
   return console.log(res);
 };
 
-const getWikiText = (name, callback) => {
-  name = formatName(name);
-  request
-    .get(`http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&explaintext=&titles=${name}`)
-    .end((err, res) => {
-      if (err) callback(err);
-      for (var key in res.body.query.pages) {
-        const textExtract = res.body.query.pages[key].extract;
-        callback(null, textExtract);
-      }
-    });
+const getText = (newAnimalsData, done) => {
+  async.mapSeries(newAnimalsData, (animal, mapCallback) => {
+    const name = animal.wiki_name;
+    request
+      .get(`http://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&explaintext=&titles=${name}`)
+      .end((err, res) => {
+        if (err) mapCallback(err);
+        for (var key in res.body.query.pages) {
+          animal.description = res.body.query.pages[key].extract;
+          console.log(animal.description);
+          mapCallback(null, animal);
+        }
+      });
+    }, (err) => {
+      if (err) return done(err);
+      return done(null, newAnimalsData);
+  });
 };
 
-firstGet(log);
 
-// getWikiText('magpie', log);
-// getWikiImages('black-headed gull', log);
+
+// getWikiText(log);
+getWikiData(log);
 
 module.exports = {
   log

@@ -58,12 +58,14 @@ module.exports = [{
     "latin_name": "Aegithalos caudatus",
     "common_name": "Long-tailed Tit",
     "wiki_name": "long-tailed_tit"
-}, {
+},
+{
     "taxon_group": "Bird",
     "latin_name": "Psittacula krameri",
     "common_name": "Ring-necked Parakeet",
     "wiki_name": "rose-ringed_parakeet"
-}, {
+},
+{
     "taxon_group": "Bird",
     "latin_name": "Gallinula chloropus",
     "common_name": "Moorhen",
@@ -207,7 +209,7 @@ module.exports = [{
     "taxon_group": "Bird",
     "latin_name": "Pyrrhula pyrrhula",
     "common_name": "Bullfinch",
-    "wiki_name": "bullfinch"
+    "wiki_name": "eurasian_bullfinch"
 }, {
     "taxon_group": "Bird",
     "latin_name": "Turdus pilaris",
@@ -318,4 +320,9 @@ module.exports = [{
     "latin_name": "Sylvia borin",
     "common_name": "Garden Warbler",
     "wiki_name": "garden_warbler"
+}, {
+    "taxon_group": "Bird",
+    "latin_name": "Apus apus",
+    "common_name": "Swift",
+    "wiki_name": "swift"
 }]
