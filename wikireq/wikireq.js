@@ -24,6 +24,7 @@ const firstGetImg = (done) => {
         if (err) mapCallback(err);
         for (var key in res.body.query.pages) {
           animal.photo = res.body.query.pages[key].pageimage;
+          console.log(animal.photo, animal.common_name);
           mapCallback(null, animal);
         }
       });
@@ -76,11 +77,8 @@ const getText = (newAnimalsData, done) => {
   });
 };
 
-
-
-// getWikiText(log);
-getWikiData(log);
-
 module.exports = {
-  log
+  firstGetImg,
+  secondGetImg,
+  getText
 };

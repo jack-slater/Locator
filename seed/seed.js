@@ -3,10 +3,13 @@ const parks = require('./data/parks');
 const sightings = require('./data/sightings');
 const models = require('../models/models');
 
-var mongoose = require('mongoose');
-var async = require('async');
-var log4js = require('log4js');
-var logger = log4js.getLogger();
+const mongoose = require('mongoose');
+const async = require('async');
+const log4js = require('log4js');
+const logger = log4js.getLogger();
+const firstGetImg = require('../wikireq/wikireq').firstGetImg;
+const secondGetImg = require('../wikireq/wikireq').secondGetImg;
+const getText = require('../wikireq/wikireq').getText;
 
 mongoose.connect('mongodb://localhost/test-park-project', function (err) {
   if (!err) {
@@ -49,8 +52,22 @@ function addParks (done) {
   });
 }
 
-function addAnimals (done) {
-  async.eachSeries(animals, function (animal, callback) {
+const addAnimals = (callback) => {
+  async.waterfall([
+    firstGetImg,
+    secondGetImg,
+    getText,
+    saveAnimals
+  ], function (err, res) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, res);
+  });
+};
+
+function saveAnimals (newAnimalsData, done) {
+  async.eachSeries(newAnimalsData, function (animal, callback) {
     var animalDoc = new models.Animals(animal);
     animalDoc.save(function (err) {
       if (err) {
@@ -67,7 +84,6 @@ function addAnimals (done) {
 }
 
 function addSightings (done) {
-
   async.waterfall([
     findParkId,
     findAnimalId,
