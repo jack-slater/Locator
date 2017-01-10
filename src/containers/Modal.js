@@ -9,6 +9,7 @@ import {
 import Button from 'apsl-react-native-button';
 let { height, width } = Dimensions.get('window');
 
+
 export class MapModal extends Component {
   render () {
     return (
@@ -30,7 +31,6 @@ export class MapModal extends Component {
               <Text style={styles.text}>close</Text>
             </Button>
           </View>
-
         </Modal>
       </View>
     );

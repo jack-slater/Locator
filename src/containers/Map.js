@@ -21,11 +21,13 @@ export class Map extends Component {
       {id: '3', title: 'C', latlng: {latitude: 53.43508, longitude: -2.227392}, description: 'third marker'}
       ],
       modalVisible: false
+
     };
   }
   setModalVisibility (visible) {
     this.setState({modalVisible: visible});
   }
+
   handlePress () {
     this.setState({modalVisible: true});
   }
@@ -68,6 +70,7 @@ export class Map extends Component {
       return acc;
     }, '');
     this.setState({modalVisible: false, markers: this.removeMarker(id)});
+
   }
   componentDidMount () {
     navigator.geolocation.watchPosition(pos => {
@@ -108,7 +111,7 @@ export class Map extends Component {
       <View style={styles.container}>
         <MapView
           style={styles.map}
-          region={{
+          initialRegion={{
             latitude: 53.451562,
             longitude: -2.249320,
             latitudeDelta: 0.0082,
