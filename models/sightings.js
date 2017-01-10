@@ -3,15 +3,11 @@ var Schema = mongoose.Schema;
 
 const SightingSchema = new Schema({
   park_id: {
-    type: Number,
+    type: Schema.Types.ObjectId,
     required: true
   },
   animal_id: {
-    type: Number,
-    required: true
-  },
-  animal_name: {
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true
   },
   lat_lng: {
@@ -40,9 +36,9 @@ const SightingSchema = new Schema({
     required: true,
     default: 1
   },
-  obs_photo: {
-    type: String
-  }
+  // obs_photo: {
+  //   type: String
+  // }
 });
 
 module.exports = mongoose.model('sightings', SightingSchema);

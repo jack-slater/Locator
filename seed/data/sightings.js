@@ -948,7 +948,7 @@ var sightingsData = [
    "longitude": -2.2458576
  },
  {
-   "animal_name": "Rock Dove",
+   "animal_name": "Feral Pigeon",
    "date": "30/07/2011",
    "spatial_ref": "SJ83479484",
    "obs_abundance": 2,
@@ -957,7 +957,7 @@ var sightingsData = [
    "longitude": -2.2503665
  },
  {
-   "animal_name": "Rock Dove",
+   "animal_name": "Feral Pigeon",
    "date": "30/07/2011",
    "spatial_ref": "SJ83639496",
    "obs_abundance": 4,
@@ -966,7 +966,7 @@ var sightingsData = [
    "longitude": -2.2479636
  },
  {
-   "animal_name": "Rock Dove",
+   "animal_name": "Feral Pigeon",
    "date": "28/01/2012",
    "spatial_ref": "SJ83489483",
    "obs_abundance": 51,

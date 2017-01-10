@@ -67,26 +67,83 @@ function addAnimals (done) {
 }
 
 function addSightings (done) {
-  async.eachSeries(sightings, function (sighting, callback) {
-    models.Parks.find({name: sighting.park_name}, function (err, doc) {
-      if (err) {
-        console.log(err);
-      }
-      sighting.park_id = doc._id;
-    });
 
+  async.waterfall([
+    findParkId,
+    findAnimalId,
+    addIds
+  ], function (err) {
+    if (err) {
+      logger.error('ERROR SEEDING :O');
+      console.log(JSON.stringify(err));
+      process.exit();
+    }
+    logger.info('DONE SEEDING!!');
+    process.exit();
+  });
+}
+
+function findParkId (done) {
+  var parkArr = [];
+  async.eachSeries(sightings, function (sighting, cb) {
+    models.Parks.find({name: sighting.park_name}, function (err, doc) {
+      console.log(doc, 'doc');
+      if (err) {
+        return cb(err);
+      }
+      parkArr.push({name: sighting.park_name, id: doc[0]._id});
+
+      parkArr.forEach(function (park) {
+        sightings.forEach(function (sighting) {
+          if (park.name === sighting.park_name) {
+            sighting.park_id = park.id;
+          }
+        });
+      });
+
+      return cb();
+    });
+  }, function (error) {
+    if (error) return done(error);
+    return done(null);
+  });
+}
+
+function findAnimalId (done) {
+  var animalArr = [];
+  async.eachSeries(sightings, function (sighting, cb) {
     models.Animals.find({common_name: sighting.animal_name}, function (err, doc) {
       if (err) {
-        console.log(err);
+        return cb(err);
       }
-      sighting.animal_id = doc._id;
+      if (doc.length) {
+        animalArr.push({name: sighting.animal_name, id: doc[0]._id});
+      }
+
+      animalArr.forEach(function (animal) {
+        sightings.forEach(function (sighting) {
+          if (animal.name === sighting.animal_name) {
+            sighting.animal_id = animal.id;
+          }
+        });
+      });
+
+      return cb();
     });
-    var sightingDoc = new models.Sightings(sighting);
-    sightingDoc.save(function (err) {
+  }, function (error) {
+    if (error) return done(error);
+    return done(null);
+  });
+}
+
+function addIds (done) {
+  async.eachSeries(sightings, function (sighting, cb) {
+    var newSighting = new models.Sightings(sighting);
+    newSighting.save(function (err) {
       if (err) {
-        return callback(err);
+        return cb(err);
       }
-      return callback();
+      return cb();
     });
   }, function (err) {
     if (err) {
