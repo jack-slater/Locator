@@ -1,9 +1,10 @@
 const request = require('superagent');
 const async = require('async');
+const animalsData = require('../seed/data/animals');
 
-const getWikiImages = (name, callback) => {
+const getWikiImages = (animalsData, callback) => {
   async.waterfall([
-    firstGet.bind(null, name),
+    firstGet,
     secondGet
   ], function (err, res) {
     if (err) {
@@ -17,18 +18,26 @@ const formatName = (name) => {
   return name.replace(' ', '_');
 };
 
-const firstGet = (name, callback) => {
-  name = formatName(name);
-  request
-    .get(`http://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=100&titles=${name}`)
-    .end((err, res) => {
-      if (err) callback(err);
-      for (var key in res.body.query.pages) {
-        const imgName = res.body.query.pages[key].pageimage;
-        callback(null, imgName);
-      }
-    });
+const firstGet = (done) => {
+  async.mapSeries(animalsData, (animal, mapCallback) => {
+    const name = animal.wiki_name;
+    request
+      .get(`http://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=100&titles=${name}`)
+      .end((err, res) => {
+        if (err) mapCallback(err);
+        for (var key in res.body.query.pages) {
+          console.log(res.body.query.pages[key].pageimage, name);
+          animal.photo = res.body.query.pages[key].pageimage;
+          mapCallback(null, animal);
+        }
+      });
+  }, (err) => {
+    if (err) return done(err);
+    return done(null, animalsData);
+  });
 };
+
+
 
 const secondGet = (imgName, callback) => {
   if (imgName.slice(0, 3) !== 'File') {
@@ -61,5 +70,11 @@ const getWikiText = (name, callback) => {
     });
 };
 
-getWikiText('magpie', log);
+firstGet(log);
+
+// getWikiText('magpie', log);
 // getWikiImages('black-headed gull', log);
+
+module.exports = {
+  log
+};
