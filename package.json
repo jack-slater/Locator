@@ -18,7 +18,7 @@
     "react-native": "^0.39.2",
     "react-native-maps": "^0.12.2",
     "rnpm": "^1.9.0",
-    "watchman": "^0.1.8"
+    "watchman": "^0.1.8",
     "superagent": "^3.3.1"
   },
   "devDependencies": {
