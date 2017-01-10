@@ -9,10 +9,16 @@
   },
   "dependencies": {
     "apsl-react-native-button": "^3.0.2",
+    "async": "^2.1.4",
+    "express": "^4.14.0",
     "haversine": "^1.0.1",
+    "log4js": "^1.1.0",
+    "logger": "0.0.1",
+    "mongoose": "^4.7.6",
     "react": "15.4.1",
     "react-native": "0.39.2",
-    "react-native-maps": "^0.12.2"
+    "react-native-maps": "^0.12.2",
+    "superagent": "^3.3.1"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",
