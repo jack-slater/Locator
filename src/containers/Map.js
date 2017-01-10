@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import haversine from 'haversine';
 import {MapModal} from './Modal';
-import Button from 'apsl-react-native-button';
 
 export class Map extends Component {
   constructor () {
@@ -41,11 +40,11 @@ export class Map extends Component {
       }
       return acc;
     }, '');
-      this.state.markers.map((marker) => {
-        if (dist === marker.id) {
-          props = marker.description;
-        }
-      });
+    this.state.markers.map((marker) => {
+      if (dist === marker.id) {
+        props = marker.description;
+      }
+    });
     return props;
   }
     // if (this.state.distB < 10) {
@@ -55,12 +54,20 @@ export class Map extends Component {
     //   return props = this.state.markers[0].description;
     // }
   removeMarker (id) {
-    this.state.markers.filter((marker) => {
-      marker.id !== id; });
+    var index = this.state.markers.findIndex(function (marker) {
+      return marker.id === id;
+    });
+    var newState = this.state.markers.slice(0, index).concat(this.state.markers.slice(index + 1));
+    return newState;
   }
   closeModal () {
-    this.setState({modalVisible: false});
-
+    let id = this.state.dist.reduce((acc, a) => {
+      if (a.dist < 10) {
+        acc = a.id;
+      }
+      return acc;
+    }, '');
+    this.setState({modalVisible: false, markers: this.removeMarker(id)});
   }
   componentDidMount () {
     navigator.geolocation.watchPosition(pos => {
@@ -120,6 +127,14 @@ export class Map extends Component {
           />
         ))}
         </MapView>
+        <View style={styles.textContainer}>
+          {this.state.dist.map((a, i) => {
+            return a.dist !== 'unknown' && <Text key={i}>
+              {a.dist < 10 ? <Text>hello</Text> : <Text>{a.dist}</Text> }
+            </Text>;
+          })
+        }
+        </View>
         <MapModal
           visible={this.state.modalVisible}
           closeModal={this.closeModal.bind(this)}
@@ -144,7 +159,6 @@ const styles = StyleSheet.create({
   }
 });
 
-// <View style={styles.textContainer}>
 // {this.state.distA !== 'unknown' && <Text>
 //   {this.state.distA < 10 ? 'first marker' : <Text>{this.state.distA}</Text> }
 // </Text> }
@@ -155,4 +169,3 @@ const styles = StyleSheet.create({
 //   {this.state.distC !== 'unknown' && <Text>
 //     {this.state.distC < 10 ? <Text>You have solved C</Text> : <Text>{this.state.distC}</Text> }
 //   </Text> }
-// </View>

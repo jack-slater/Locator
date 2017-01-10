@@ -27,7 +27,7 @@ export class MapModal extends Component {
               style={styles.button}
               onPress={this.props.closeModal}
             >
-              <Text style={styles.text}>x</Text>
+              <Text style={styles.text}>close</Text>
             </Button>
           </View>
 
