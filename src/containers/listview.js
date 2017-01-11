@@ -2,43 +2,60 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  Image,
+  ListView
 } from 'react-native';
 import request from 'superagent';
+import animalData from '../../smallimg';
+import AnimalItem from './AnimalItem';
+
+console.warn(animalData)
 
 export class Listview extends Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
-      animals: []
+      dataSource: ds.cloneWithRows(animalData)
     };
-  }
+}
 
-  componentDidMount () {
-    request
-      .get(`http://localhost:3000/animals`)
-      .end((err, res) => {
-        if (err) console.log(err);
-        console.warn(res);
-        this.setState({animals: res.body});
-      });
-  }
+  // componentDidMount () {
+  //   request
+  //     .get(`http://192.168.122.1:3000/animals`)
+  //     .end((err, res) => {
+  //       if (err) console.log(err);
+  //
+  //       this.setState({animals: res.body});
+  //     });
+  // }
 
-  getPicture (address) {
-    request
-      .get(address)
-      .end((err, res) => {
-        if (err) console.log(err);
-        this.setState({animals: res.body});
-      });
-  }
+  // getPicture (address) {
+  //   request
+  //     .get(address)
+  //     .end((err, res) => {
+  //       if (err) console.log(err);
+  //       this.setState({animals: res.body});
+  //     });
+  // }
 
   render () {
     return (
       <View style={styles.container}>
-        {this.state.animals.length > 0 && this.state.animals.map(animal => {
-          <View>{animal.common_name}</View>
-        })}
+        <ListView
+          contentContainerStyle={styles.list}
+          dataSource={this.state.dataSource}
+          renderRow={(animal) =>
+            <View style={styles.item}>
+                <Image
+                  style= {{ height:100, width: 100 }}
+                  source={{uri: animal.smallImg}}
+                />
+              <Text>{animal.common_name}</Text>
+            </View>
+          }
+        />
       </View>
     );
   }
@@ -47,5 +64,17 @@ export class Listview extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
+  list: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start'
+  },
+  item: {
+    width: 100,
+    height: 110,
+    margin: 5
+  }
 });

@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const db = 'mongodb://localhost/test-park-project';
+const db = 'mongodb://admin:12345@ds161028.mlab.com:61028/test_db';
 const Animals = require('../models/animals');
 
 mongoose.connect(db, (err) => {
