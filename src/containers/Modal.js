@@ -17,7 +17,6 @@ export class MapModal extends Component {
           animationType={'slide'}
           visible={this.props.visible}
           transparent={true}
-          setModalVisibility={this.props.setModalVisibility}
           onRequestClose={this.props.closeModal}
           >
           <View style={styles.modal}>
@@ -30,7 +29,6 @@ export class MapModal extends Component {
               <Text style={styles.text}>close</Text>
             </Button>
           </View>
-
         </Modal>
       </View>
     );
@@ -54,10 +52,26 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     bottom: 10,
-    right: 60,
-    width: width * 0.6,
+    right: 10,
+    width: width * 0.41,
+    borderColor: '#f5f5f5',
+    paddingLeft: 50,
+    paddingRight: 50
+  },
+  buttonRec: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    width: width * 0.41,
     borderColor: '#f5f5f5',
     paddingLeft: 50,
     paddingRight: 50
   }
 });
+
+// <Button
+//   style={styles.buttonRec}
+//   onPress={this.props.pressRecord}
+// >
+//   <Text style={styles.text}>Record sighting</Text>
+// </Button>

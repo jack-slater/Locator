@@ -21,17 +21,19 @@ export class Map extends Component {
       {id: '3', title: 'C', latlng: {latitude: 53.43508, longitude: -2.227392}, description: 'third marker'}
       ],
       modalVisible: false
+
     };
   }
-  setModalVisibility (visible) {
-    this.setState({modalVisible: visible});
-  }
-  handlePress () {
-    this.setState({modalVisible: true});
-  }
-  handleChange () {
-    this.setModalVisibility(true);
-  }
+  // setModalVisibility (visible) {
+  //   this.setState({modalVisible: visible});
+  // }
+  //
+  // handlePress () {
+  //   this.setState({modalVisible: true});
+  // }
+  // handleChange () {
+  //   this.setModalVisibility(true);
+  // }
   setModalProps () {
     let props;
     let dist = this.state.dist.reduce((acc, a) => {
@@ -68,6 +70,7 @@ export class Map extends Component {
       return acc;
     }, '');
     this.setState({modalVisible: false, markers: this.removeMarker(id)});
+
   }
   componentDidMount () {
     navigator.geolocation.watchPosition(pos => {
@@ -88,13 +91,11 @@ export class Map extends Component {
       // {latitude: markers[1].latlng.latitude, longitude: markers[1].latlng.longitude}, {unit: 'meter'}).toFixed(0);
       // const distC = haversine({latitude: lat, longitude: long},
       // {latitude: markers[2].latlng.latitude, longitude: markers[2].latlng.longitude}, {unit: 'meter'}).toFixed(0);
+      // const modal = distances.some(a => a.dist < 10);
+
       this.setState({
         dist: distances,
-        modalVisible: this.state.dist.forEach((a) => {
-          if (a.dist < 10) {
-            return true;
-          } else return false;
-        })
+        modalVisible: distances.some(a => a.dist < 10)
       });
       // this.setState({long, lat, distA, distB, distC, modalVisible: distB < 10 || distA < 10});
     },
@@ -108,7 +109,7 @@ export class Map extends Component {
       <View style={styles.container}>
         <MapView
           style={styles.map}
-          region={{
+          initialRegion={{
             latitude: 53.451562,
             longitude: -2.249320,
             latitudeDelta: 0.0082,
