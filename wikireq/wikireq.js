@@ -20,12 +20,13 @@ const firstGetImg = (done) => {
   async.mapSeries(animalsData, (animal, mapCallback) => {
     const name = animal.wiki_name;
     request
-      .get(`http://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=100&titles=${name}`)
+      .get(`http://en.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=200&titles=${name}`)
       .end((err, res) => {
         if (err) mapCallback(err);
         for (var key in res.body.query.pages) {
           animal.photo = res.body.query.pages[key].pageimage;
           // console.log(animal.photo, animal.common_name);
+          animal.smallImg = res.body.query.pages[key].thumbnail.source;
           mapCallback(null, animal);
         }
       });
@@ -56,11 +57,13 @@ const secondGetImg = (newAnimalsData, done) => {
 
 const log = (err, res) => {
   if (err) return console.log(err);
-  fs.writeFile('data.json', JSON.stringify(res), (err) => {
+  fs.writeFile('smallimg.js', JSON.stringify(res), (err) => {
     if (err) console.log(err);
     console.log('file saved');
   })
 };
+
+firstGetImg(log)
 
 const getText = (newAnimalsData, done) => {
   async.mapSeries(newAnimalsData, (animal, mapCallback) => {
@@ -81,7 +84,7 @@ const getText = (newAnimalsData, done) => {
   });
 };
 
-console.log(getWikiData(log));
+// console.log(getWikiData(log));
 
 module.exports = {
   firstGetImg,
