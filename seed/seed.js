@@ -1,4 +1,5 @@
-const animals = require('./data/animals');
+// const animals = require('./data/animals');
+const animals = require('../data');
 const parks = require('./data/parks');
 const sightings = require('./data/sightings');
 const models = require('../models/models');
@@ -11,13 +12,13 @@ const firstGetImg = require('../wikireq/wikireq').firstGetImg;
 const secondGetImg = require('../wikireq/wikireq').secondGetImg;
 const getText = require('../wikireq/wikireq').getText;
 
-mongoose.connect('mongodb://localhost/test-park-project', function (err) {
+mongoose.connect('mongodb://admin:12345@ds161028.mlab.com:61028/test_db', function (err) {
   if (!err) {
     logger.info(`connected to database`);
     mongoose.connection.db.dropDatabase();
     async.waterfall([
       addParks,
-      addAnimals,
+      saveAnimals,
       addSightings
     ], function (err) {
       if (err) {
@@ -54,9 +55,6 @@ function addParks (done) {
 
 const addAnimals = (callback) => {
   async.waterfall([
-    firstGetImg,
-    secondGetImg,
-    getText,
     saveAnimals
   ], function (err, res) {
     if (err) {
@@ -66,8 +64,8 @@ const addAnimals = (callback) => {
   });
 };
 
-function saveAnimals (newAnimalsData, done) {
-  async.eachSeries(newAnimalsData, function (animal, callback) {
+function saveAnimals (done) {
+  async.eachSeries(animals, function (animal, callback) {
     var animalDoc = new models.Animals(animal);
     animalDoc.save(function (err) {
       if (err) {

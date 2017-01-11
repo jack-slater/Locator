@@ -1,6 +1,7 @@
 const request = require('superagent');
 const async = require('async');
 const animalsData = require('../seed/data/animals');
+const fs = require('fs');
 
 const getWikiData = (callback) => {
   async.waterfall([
@@ -24,7 +25,7 @@ const firstGetImg = (done) => {
         if (err) mapCallback(err);
         for (var key in res.body.query.pages) {
           animal.photo = res.body.query.pages[key].pageimage;
-          console.log(animal.photo, animal.common_name);
+          // console.log(animal.photo, animal.common_name);
           mapCallback(null, animal);
         }
       });
@@ -43,7 +44,7 @@ const secondGetImg = (newAnimalsData, done) => {
         if (err) mapCallback(err);
         for (var key in res.body.query.pages) {
           animal.photo = res.body.query.pages[key].imageinfo[0].url;
-          console.log(animal.photo, animal.common_name);
+          // console.log(animal.photo, animal.common_name);
           mapCallback(null, animal);
         }
       });
@@ -55,7 +56,10 @@ const secondGetImg = (newAnimalsData, done) => {
 
 const log = (err, res) => {
   if (err) return console.log(err);
-  return console.log(res);
+  fs.writeFile('data.json', JSON.stringify(res), (err) => {
+    if (err) console.log(err);
+    console.log('file saved');
+  })
 };
 
 const getText = (newAnimalsData, done) => {
@@ -67,7 +71,7 @@ const getText = (newAnimalsData, done) => {
         if (err) mapCallback(err);
         for (var key in res.body.query.pages) {
           animal.description = res.body.query.pages[key].extract;
-          console.log(animal.description);
+          // console.log(animal.description);
           mapCallback(null, animal);
         }
       });
@@ -76,6 +80,8 @@ const getText = (newAnimalsData, done) => {
       return done(null, newAnimalsData);
   });
 };
+
+console.log(getWikiData(log));
 
 module.exports = {
   firstGetImg,
