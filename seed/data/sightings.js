@@ -1290,6 +1290,12 @@ sightingsData.forEach(function (sighting) {
     latitude: sighting.latitude,
     longitude: sighting.longitude
   };
+
+  var day = sighting.date.slice(0, 2);
+  var month = sighting.date.slice(3, 5);
+  var year = sighting.date.slice(6);
+
+  sighting.date = new Date(year + '-' + month + '-' + day);
 });
 
 module.exports = sightingsData;
