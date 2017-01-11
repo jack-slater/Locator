@@ -12,7 +12,7 @@ const firstGetImg = require('../wikireq/wikireq').firstGetImg;
 const secondGetImg = require('../wikireq/wikireq').secondGetImg;
 const getText = require('../wikireq/wikireq').getText;
 
-mongoose.connect('mongodb://admin:12345@ds161028.mlab.com:61028/test_db', function (err) {
+mongoose.connect('mongodb://localhost/parkapp-test', function (err) {
   if (!err) {
     logger.info(`connected to database`);
     mongoose.connection.db.dropDatabase();
@@ -101,7 +101,6 @@ function findParkId (done) {
   var parkArr = [];
   async.eachSeries(sightings, function (sighting, cb) {
     models.Parks.find({name: sighting.park_name}, function (err, doc) {
-      console.log(doc, 'doc');
       if (err) {
         return cb(err);
       }

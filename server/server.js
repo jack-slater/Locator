@@ -2,8 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
+const _ = require('underscore');
 const db = 'mongodb://localhost/test-park-project';
 const Animals = require('../models/animals');
+const Sightings = require('../models/sightings');
 
 mongoose.connect(db, (err) => {
   if (!err) console.log('connected to database');
@@ -19,6 +21,20 @@ function getAnimals (param, callback) {
   });
 }
 
+function getSightings (callback) {
+  Sightings.aggregate(
+   [ { $sample: { size: 10 } } ], function (err, doc) {
+     if (err) {
+       return callback(err);
+     }
+
+     var filteredDoc = _.uniq(doc, false, function (sighting) {
+       return sighting.animal_id.toString();
+     });
+     callback(null, filteredDoc);
+   });
+}
+
 app.get('/animals', (req, res) => {
   const param = req.params;
   getAnimals(param, function (err, data) {
@@ -26,6 +42,15 @@ app.get('/animals', (req, res) => {
       return res.status(404).json({reason: 'Not Found'});
     }
     res.status(200).json({animals: data});
+  });
+});
+
+app.get('/randomSightings', (req, res) => {
+  getSightings(function (err, data) {
+    if (err) {
+      return res.status(404).json({reason: 'Not Found'});
+    }
+    res.status(200).json({sightings: data});
   });
 });
 
