@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Coordinates, Map, Listview } from './containers';
+import { Coordinates, Map, Listview, Async } from './containers';
 
 export const Root = () => (
-  <Listview />
+  <Async />
 );
